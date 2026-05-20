@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+// allow cors request from any origin and with credentials
 app.use(cors({origin: (origin, callback)=> callback(null, true), credentials: true}));
 
 //api routes
