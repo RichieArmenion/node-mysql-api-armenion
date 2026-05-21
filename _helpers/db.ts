@@ -11,23 +11,13 @@ initialize();
 
 async function initialize() {
     const { host, port, user, password, database } = config.database;
-
-    const connection = await mysql.createConnection({
-        host,
-        port: Number(port),
-        user,
-        password
-    });
+    const connection = await mysql.createConnection({ host, port, user, password });
 
     // Create DB if it doesn't exist
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
     // Connect to DB
-    const sequelize = new Sequelize(database, user, password, {
-        host,
-        port: Number(port), 
-        dialect: 'mysql'
-    });
+    const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
 
     // Init models
     db.Account = accountModel(sequelize);
