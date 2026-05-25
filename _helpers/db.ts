@@ -18,7 +18,7 @@ async function initialize() {
     const connection = await mysql.createConnection({ host, port, user, password });
 
     // Create DB if it doesn't exist
-    await connection.query(CREATE DATABASE IF NOT EXISTS \`${database}\;`);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\``);
 
     // Connect to DB
     const sequelize = new Sequelize(database, user, password, {
