@@ -1,4 +1,3 @@
-import config from '../config.json';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -147,11 +146,11 @@ async function create(params: any) {
     if (await db.Account.findOne({ where: { email: params.email } })) {
         throw 'Email "' + params.email + '" is already registered';
     }
-    
+
     const account = new db.Account(params);
     account.verified = Date.now();
 
-    account.passwordHash = await hash (params.password);
+    account.passwordHash = await hash(params.password);
     await account.save();
     return basicDetails(account);
 }
@@ -161,7 +160,7 @@ async function update(id: any, params: any) {
 
     if (params.email && account.email !== params.email && await db.Account.findOne({ where: { email: params.email } })) {
         throw 'Email "' + params.email + '" is already taken';
-    }  
+    }
 
     if (params.password) {
         params.passwordHash = await hash(params.password);
@@ -196,7 +195,7 @@ async function hash(password: any) {
 }
 
 function generateJwtToken(account: any) {
-    return jwt.sign({ sub: account.id, id: account.id }, config.secret, { expiresIn: '15m' });
+    return jwt.sign({ sub: account.id, id: account.id }, process.env.JWT_SECRET!, { expiresIn: '15m' });
 }
 
 function generateRefreshToken(account: any, ipAddress: any) {
@@ -232,7 +231,7 @@ async function sendVerificationEmail(account: any, origin: any) {
         to: account.email,
         subject: 'Sign-up Verification API - Verify Email',
         html: `<h4>Verify Email</h4>
-                <p>Thanks for registering~</p>
+                <p>Thanks for registering!</p>
                 ${message}`
     });
 }
@@ -258,7 +257,7 @@ async function sendPasswordResetEmail(account: any, origin: any) {
     let message;
     if (origin) {
         const resetUrl = `${origin}/account/reset-password?token=${account.resetToken}`;
-        message= `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
+        message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
                     <p><a href="${resetUrl}">${resetUrl}</a></p>`;
     } else {
         message = `<p>Please use the below token to reset your password with the <code>/account/reset-password</code> api route:</p>
