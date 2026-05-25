@@ -1,7 +1,7 @@
 {
     "database": {
-        "host": "mysql.railway.internal",
-        "port": 3306,
+        "host": "tramway.proxy.rlwy.net",
+        "port": 35362,
         "user": "root",
         "password": "nCtVvVvMNuZblyZRnZWrvPJRwlubOHBT",
         "database": "railway"
